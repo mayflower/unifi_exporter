@@ -42,6 +42,7 @@ func NewStationCollector(c *unifi.Client, sites []*unifi.Site) *StationCollector
 			"id",
 			"ap_mac",
 			"station_mac",
+			"ip",
 			"hostname",
 			"connection",
 		}
@@ -153,6 +154,7 @@ func (c *StationCollector) collectStationBytes(ch chan<- prometheus.Metric, site
 			s.ID,
 			s.APMAC.String(),
 			s.MAC.String(),
+			s.IP.String(),
 			hostName(s),
 			connType(s),
 		}
@@ -196,6 +198,7 @@ func (c *StationCollector) collectStationSignal(ch chan<- prometheus.Metric, sit
 			s.ID,
 			s.APMAC.String(),
 			s.MAC.String(),
+			s.IP.String(),
 			hostName(s),
 			connType(s),
 		}
