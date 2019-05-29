@@ -326,31 +326,33 @@ func (c *DeviceCollector) collectDeviceStations(ch chan<- prometheus.Metric, sit
 		}
 
 		for _, r := range d.Radios {
-			// Since the radio name and type will be different for each
-			// radio, we copy the original labels slice and append, to avoid
-			// mutating it
-			llabels := make([]string, len(labels))
-			copy(llabels, labels)
-			llabels = append(llabels, r.Name, r.Radio)
+			if r.Stats != nil {
+				// Since the radio name and type will be different for each
+				// radio, we copy the original labels slice and append, to avoid
+				// mutating it
+				llabels := make([]string, len(labels))
+				copy(llabels, labels)
+				llabels = append(llabels, r.Name, r.Radio)
 
-			ch <- prometheus.MustNewConstMetric(
-				c.Stations,
-				prometheus.GaugeValue,
-				float64(r.Stats.NumberStations),
-				llabels...,
-			)
-			ch <- prometheus.MustNewConstMetric(
-				c.UserStations,
-				prometheus.GaugeValue,
-				float64(r.Stats.NumberUserStations),
-				llabels...,
-			)
-			ch <- prometheus.MustNewConstMetric(
-				c.GuestStations,
-				prometheus.GaugeValue,
-				float64(r.Stats.NumberGuestStations),
-				llabels...,
-			)
+				ch <- prometheus.MustNewConstMetric(
+					c.Stations,
+					prometheus.GaugeValue,
+					float64(r.Stats.NumberStations),
+					llabels...,
+				)
+				ch <- prometheus.MustNewConstMetric(
+					c.UserStations,
+					prometheus.GaugeValue,
+					float64(r.Stats.NumberUserStations),
+					llabels...,
+				)
+				ch <- prometheus.MustNewConstMetric(
+					c.GuestStations,
+					prometheus.GaugeValue,
+					float64(r.Stats.NumberGuestStations),
+					llabels...,
+				)
+			}
 		}
 	}
 }
